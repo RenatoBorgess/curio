@@ -1,0 +1,58 @@
+{
+  // ──────────────────────────────────────────────────────────────────
+  // CURIÓ 🐦 — preset comunitário para usar os modelos da Maritaca AI
+  // (família Sabiá e S5) como provedor padrão no OpenCode.
+  //
+  // ⚠️ PROJETO INDEPENDENTE E NÃO OFICIAL.
+  //    Não é mantido pela Maritaca AI nem pelo projeto OpenCode.
+  //    "Maritaca", "Sabiá" e "S5" são marcas dos seus respectivos
+  //    titulares; uso referencial, conforme os termos de cada serviço.
+  // ──────────────────────────────────────────────────────────────────
+
+  "$schema": "https://opencode.ai/config.schema.json",
+
+  "provider": {
+    "maritaca": {
+      // Pacote do AI SDK que fala o dialeto OpenAI-compatible —
+      // é o modo que a API da Maritaca suporta oficialmente.
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Maritaca AI · Sabiá & S5",
+      "options": {
+        // Endpoint oficial (compatível com OpenAI) informado na
+        // documentação da Maritaca:
+        // https://docs.maritaca.ai/pt/api/comeco-rapido
+        "baseURL": "https://chat.maritaca.ai/api",
+
+        // Chave lida da variável de ambiente MARITACA_API_KEY.
+        // Gere a sua em: https://plataforma.maritaca.ai/chaves-de-api
+        // Se a interpolação {env:...} não funcionar na sua versão do
+        // OpenCode, substitua pelo valor literal da chave (menos seguro).
+        "apiKey": "{env:MARITACA_API_KEY}"
+      },
+      "models": {
+        // IDs vigentes aceitos pela API — lista atualizada em:
+        // https://docs.maritaca.ai/pt/modelos
+        "s5":               { "name": "S5 — raciocínio forte, 1M tokens de contexto" },
+        "s5-nano":          { "name": "S5 Nano — econômico, pesos abertos, 256K" },
+        "sabia-4":          { "name": "Sabiá 4 — generalista agêntico, 128K" },
+        "s5-free":          { "name": "S5 Free — grátis (temporário), 1M" },
+        "sabia-4-thinking": { "name": "Sabiá 4 Thinking — raciocínio explícito, 1M" },
+        "sabiazinho-4":     { "name": "Sabiazinho 4 — rápido e barato p/ escala, 128K" }
+      }
+        
+    }
+  },
+
+  // Modelo default ao abrir o OpenCode (formato "provedor/modelo").
+  // O Curió usa o S5 Free como padrão: é gratuito, então dá para
+  // testar sem gastar créditos. A Maritaca avisa que a oferta é
+  // temporária e pode acabar a qualquer momento; para uso contínuo,
+  // troque por "maritaca/s5" (ou outro modelo da lista acima).
+  // O CI garante este default: veja scripts/validate_config.py.
+  "model": "maritaca/s5-free"
+
+  // NOTA: evitamos nesta v0.1 qualquer chave não documentada
+  // (fallbacks, opções de reasoning etc.) para minimizar risco de
+  // incompatibilidade entre versões. Ajustes finos ficam por conta
+  // dos testes end-to-end do roteiro D0 (ver README).
+}

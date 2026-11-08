@@ -1,0 +1,30 @@
+# Checagens mínimas do Curió — rodam a cada push/PR.
+# Filosofia: pouco, mas confiável. Conforme o roteiro D0 ganhar corpo,
+# entram testes reais de smoke contra a API (com chave em secrets).
+name: checagens
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  sanidade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validar configuração JSONC
+        run: python3 scripts/validate_config.py --expect-default maritaca/s5-free config/opencode.jsonc
+
+      - name: Checar sintaxe do instalador
+        run: bash -n scripts/setup.sh
+
+      - name: Smoke do OpenCode (não bloqueante)
+        continue-on-error: true
+        run: |
+          npm install -g opencode-ai@latest
+          opencode --version
